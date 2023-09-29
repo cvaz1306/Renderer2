@@ -14,10 +14,10 @@ namespace Renderer2
         private Frame frame;
         private Timer animationTimer;
         private int currentFrame = 0;
-        Vector3 pointIn3DSpace1 = new Vector3(-5, 5, -6);
-        Vector3 pointIn3DSpace2 = new Vector3(-5, -5, -6);
-        Vector3 pointIn3DSpace3 = new Vector3(5, 5, -6);
-        Vector3 pointIn3DSpace4 = new Vector3(5, -5, -6);
+        Vector3 pointIn3DSpace1 = new Vector3(-7, 5, -6);
+        Vector3 pointIn3DSpace2 = new Vector3(-7, -5, -6);
+        Vector3 pointIn3DSpace3 = new Vector3(7, 5, -6);
+        Vector3 pointIn3DSpace4 = new Vector3(7, -5, -6);
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -137,10 +137,10 @@ namespace Renderer2
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            pointIn3DSpace1 = new Vector3(-5, 5, -6);
-            pointIn3DSpace2 = new Vector3(-5, -5, -5);
-            pointIn3DSpace3 = new Vector3(5, 5, -6);
-            pointIn3DSpace4 = new Vector3(5, -5, -5);
+            pointIn3DSpace1 = new Vector3(-7, 5, -6);
+            pointIn3DSpace2 = new Vector3(-7, -5, -6);
+            pointIn3DSpace3 = new Vector3(7, 5, -6);
+            pointIn3DSpace4 = new Vector3(7, -5, -6);
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
