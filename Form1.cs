@@ -14,10 +14,10 @@ namespace Renderer2
         private Frame frame;
         private Timer animationTimer;
         private int currentFrame = 0;
-        Vector3 pointIn3DSpace1 = new Vector3(0, 5, -6);
-        Vector3 pointIn3DSpace2 = new Vector3(0, 0, -5);
+        Vector3 pointIn3DSpace1 = new Vector3(-5, 5, -6);
+        Vector3 pointIn3DSpace2 = new Vector3(-5, -5, -6);
         Vector3 pointIn3DSpace3 = new Vector3(5, 5, -6);
-        Vector3 pointIn3DSpace4 = new Vector3(5, 0, -5);
+        Vector3 pointIn3DSpace4 = new Vector3(5, -5, -6);
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -83,7 +83,7 @@ namespace Renderer2
             frame.AddLine(intersection3 * 2, intersection4 * 2, new MyColor(0, 255, 0));
             frame.AddLine(intersection2 * 2, intersection4 * 2, new MyColor(0, 0, 255));
             frame.AddLine(intersection1 * 2, intersection2 * 2, new MyColor(0, 255, 255));
-            frame.FillTriangle(intersection1, intersection2, intersection3, new MyColor(255,0,0));
+            //frame.FillTriangle(intersection1, intersection2, intersection3, new MyColor(255,0,0));
             // Render the updated frame
             RenderFrame();
         }
@@ -137,10 +137,10 @@ namespace Renderer2
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            pointIn3DSpace1 = new Vector3(0, 5, -6);
-            pointIn3DSpace2 = new Vector3(0, 0, -5);
+            pointIn3DSpace1 = new Vector3(-5, 5, -6);
+            pointIn3DSpace2 = new Vector3(-5, -5, -5);
             pointIn3DSpace3 = new Vector3(5, 5, -6);
-            pointIn3DSpace4 = new Vector3(5, 0, -5);
+            pointIn3DSpace4 = new Vector3(5, -5, -5);
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
