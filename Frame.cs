@@ -38,7 +38,9 @@ namespace Renderer2
         {
             if (IsValidIndex(row, column))
             {
-                colorMatrix[row, column] = color;
+                Vector2 ax=new Vector2(row, column);
+                Vector2 a2 = ScreenDistortion.DistortPoint(ax, 300, 400);
+                colorMatrix[(int)a2.X, (int)a2.Y] = color;
             }
             else
             {
@@ -235,4 +237,34 @@ namespace Renderer2
             return screenNormal;
         }
     }
-}
+    public class ScreenDistortion
+    {
+        // Define your custom field of view (FOV) in degrees
+        private const float CustomFOV = 90.0f;
+
+        public static Vector2 DistortPoint(Vector2 point, float screenWidth, float screenHeight)
+        {
+            // Calculate the center of the screen
+            Vector2 screenCenter = new Vector2(screenWidth / 2.0f, screenHeight / 2.0f);
+
+            // Calculate the focal length based on the FOV
+            float focalLength = (screenWidth / 2.0f) / (float)Math.Tan(Math.PI * CustomFOV / 360.0);
+
+            // Calculate the vector from the screen center to the input point
+            Vector2 vectorToCenter = point - screenCenter;
+
+            // Calculate the distance from the screen center to the input point
+            float distanceToCenter = vectorToCenter.Length();
+
+            // Calculate the angle between the vector and the x-axis
+            float angleToCenter = (float)Math.Atan2(vectorToCenter.Y, vectorToCenter.X);
+
+            // Apply distortion based on the distance and angle
+            float distortedDistance = distanceToCenter * (1.0f + (distanceToCenter / focalLength) * 0.2f);
+            float distortedX = screenCenter.X + distortedDistance * (float)Math.Cos(angleToCenter);
+            float distortedY = screenCenter.Y + distortedDistance * (float)Math.Sin(angleToCenter);
+
+            return new Vector2(distortedX, distortedY);
+        }
+    }
+    }

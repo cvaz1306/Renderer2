@@ -42,6 +42,10 @@ namespace Renderer2
 
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
+            this.Angle1.Text = (this.trackBar1.Value).ToString();
+            this.Angle2.Text = (this.trackBar2.Value).ToString();
+            this.Angle3.Text = (this.trackBar3.Value).ToString();
+
             // Get the mouse position in screen coordinates.
             Point screenMousePos = Control.MousePosition;
 
@@ -60,8 +64,8 @@ namespace Renderer2
             //pointIn3DSpace3 += new Vector3((mouseX - 500) / 200, 0, 0);
             //pointIn3DSpace4 += new Vector3((mouseX - 500) / 200, 0, 0);
             Console.WriteLine("Mouse X: " + mouseX);
-            Vector3 screenNormal = Geometry.CalculateScreenNormal((float)this.trackBar1.Value*3.6f, (float)this.trackBar2.Value * 3.6f, (float)this.trackBar3.Value * 3.6f); // Replace with your screen center.
-            Vector3 screenCenter = new Vector3(0.0f, 0.0f, 1.0f); // Replace with your screen normal vector.
+            Vector3 screenNormal = Geometry.CalculateScreenNormal((float)this.trackBar1.Value, (float)this.trackBar2.Value, (float)this.trackBar3.Value); // Replace with your screen center.
+            Vector3 screenCenter = new Vector3(0.0f+this.trackBar4.Value/25, 0.0f+this.trackBar5.Value/25, 1.0f+this.trackBar6.Value/25); // Replace with your screen normal vector.
 
             Vector2 intersection1 = Geometry.FindIntersectionOnScreen(pointIn3DSpace1, screenCenter, screenNormal);
             Vector2 intersection2 = Geometry.FindIntersectionOnScreen(pointIn3DSpace2, screenCenter, screenNormal);
