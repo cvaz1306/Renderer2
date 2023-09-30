@@ -146,7 +146,17 @@ namespace Renderer2
         {
             return row >= 0 && row < Rows && column >= 0 && column < Columns;
         }
+        public static bool IsPointAboveCameraPlane(Vector3 cameraPosition, Vector3 ScreenNormal, Vector3 point)
+        {
+            // Calculate the vector from the camera position to the point.
+            Vector3 vectorToPoint = point - cameraPosition;
 
+            // Calculate the dot product between the camera's up vector and the vector to the point.
+            float dotProduct = Vector3.Dot(ScreenNormal, vectorToPoint);
+
+            // If the dot product is positive, the point is above the camera plane; if negative, it's below.
+            return dotProduct > 0;
+        }
         public void FillTriangle(Vector2 vertex1, Vector2 vertex2, Vector2 vertex3, MyColor fillColor)
         {
             // Sort vertices by Y-coordinate to find the top, middle, and bottom vertices.
