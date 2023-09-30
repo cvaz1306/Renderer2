@@ -40,7 +40,8 @@ namespace Renderer2
             {
                 Vector2 ax=new Vector2(row, column);
                 Vector2 a2 = ScreenDistortion.DistortPoint(ax, 300, 400);
-                colorMatrix[(int)a2.X, (int)a2.Y] = color;
+                //colorMatrix[(int)a2.X, (int)a2.Y] = color;
+                colorMatrix[(int)ax.X, (int)ax.Y] = color;
             }
             else
             {
@@ -120,6 +121,52 @@ namespace Renderer2
                 }
             }
         }
+
+        public void AddLine(Vector3 startPoint, Vector3 endPoint, MyColor lineColor, Vector3 cameraPosition, Vector3 screenNormal, Vector3 screenCenter)
+        {
+
+            // Calculate the direction vector from start to end
+            Vector3 direction = endPoint - startPoint;
+            float length = direction.Length();
+
+            // Normalize the direction vector
+            direction /= length;
+
+            // Iterate through points along the line
+            for (float t = 0; t <= length; t += 0.1f)
+            {
+                // Calculate the current point in 3D space
+                Vector3 currentPointIn3D = startPoint + t * direction;
+
+                // Calculate the screen point of the current 3D point
+                Vector2 currentScreenPoint = Geometry.FindIntersectionOnScreen(currentPointIn3D, screenCenter, screenNormal);
+
+                // Check if the current point is in front of the camera
+                if (IsPointAboveCameraPlane(cameraPosition, screenNormal, currentPointIn3D))
+                {
+                    int x = (int)(currentScreenPoint + offset).X;
+                    int y = (int)(currentScreenPoint + offset).Y;
+
+                    // Check if the current pixel is within the frame bounds
+                    if (x >= 0 && x < Width && y >= 0 && y < Height)
+                    {
+                        int row = y / cellSize;
+                        int col = x / cellSize;
+                        SetColor(row, col, lineColor);
+                    }
+                }
+                else
+                {
+                    // Stop rendering if the current point is behind the camera
+                    break;
+                }
+            }
+        }
+
+
+
+
+
 
 
         public Bitmap ToBitmap()
@@ -250,7 +297,7 @@ namespace Renderer2
     public class ScreenDistortion
     {
         // Define your custom field of view (FOV) in degrees
-        private const float CustomFOV = 90.0f;
+        public static float CustomFOV = 90.0f;
 
         public static Vector2 DistortPoint(Vector2 point, float screenWidth, float screenHeight)
         {
@@ -277,4 +324,5 @@ namespace Renderer2
             return new Vector2(distortedX, distortedY);
         }
     }
-    }
+
+}

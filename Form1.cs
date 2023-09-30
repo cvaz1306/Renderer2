@@ -14,10 +14,10 @@ namespace Renderer2
         private Frame frame;
         private Timer animationTimer;
         private int currentFrame = 0;
-        Vector3 pointIn3DSpace1 = new Vector3(-7, 5, -6);
-        Vector3 pointIn3DSpace2 = new Vector3(-7, -5, -6);
-        Vector3 pointIn3DSpace3 = new Vector3(7, 5, -6);
-        Vector3 pointIn3DSpace4 = new Vector3(7, -5, -6);
+        Vector3 pointIn3DSpace1 = new Vector3(-7, 5, 20);
+        Vector3 pointIn3DSpace2 = new Vector3(-7, -5, 20);
+        Vector3 pointIn3DSpace3 = new Vector3(7, 5, 20);
+        Vector3 pointIn3DSpace4 = new Vector3(7, -5, 20);
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -48,7 +48,7 @@ namespace Renderer2
 
             // Get the mouse position in screen coordinates.
             Point screenMousePos = Control.MousePosition;
-
+            //ScreenDistortion.CustomFOV = this.FOV.Value;
             // Convert the screen coordinates to client coordinates (relative to your form).
             Point clientMousePos = PointToClient(screenMousePos);
 
@@ -83,12 +83,14 @@ namespace Renderer2
             frame.SetColor((int)intersection4.Y + 150, (int)intersection4.X + 200, new MyColor(0, 0, 255));
 
             // Draw lines to connect the corners and form a square.
-            frame.AddLine(intersection1 * 2, intersection3 * 2, new MyColor(255, 0, 0));
+/*            frame.AddLine(intersection1 * 2, intersection3 * 2, new MyColor(255, 0, 0));
             frame.AddLine(intersection3 * 2, intersection4 * 2, new MyColor(0, 255, 0));
             frame.AddLine(intersection2 * 2, intersection4 * 2, new MyColor(0, 0, 255));
-            frame.AddLine(intersection1 * 2, intersection2 * 2, new MyColor(0, 255, 255));
-            //frame.FillTriangle(intersection1, intersection2, intersection3, new MyColor(255,0,0));
-            // Render the updated frame
+            frame.AddLine(intersection1 * 2, intersection2 * 2, new MyColor(0, 255, 255));*/
+            frame.AddLine(pointIn3DSpace1, pointIn3DSpace3, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
+            frame.AddLine(pointIn3DSpace3, pointIn3DSpace4, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
+            frame.AddLine(pointIn3DSpace2, pointIn3DSpace4, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
+            frame.AddLine(pointIn3DSpace1, pointIn3DSpace2, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
             RenderFrame();
         }
 
