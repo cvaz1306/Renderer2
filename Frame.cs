@@ -5,7 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-
+using Cloo;
 namespace Renderer2
 {
     public class Frame
@@ -163,12 +163,6 @@ namespace Renderer2
             }
         }
 
-
-
-
-
-
-
         public Bitmap ToBitmap()
         {
             var bitmap = new Bitmap(Width, Height);
@@ -188,6 +182,45 @@ namespace Renderer2
 
             return bitmap;
         }
+        public void RenderBitmap(Bitmap bitmapToRender, Vector3[] corners3D, Vector3 cameraPosition, Vector3 screenNormal)
+        {
+            
+
+            // Create a list to store the pixel coordinates
+            var pixelCoordinates = Enumerable.Range(0, bitmapToRender.Width * bitmapToRender.Height)
+                .Select(i => new { X = i % bitmapToRender.Width, Y = i / bitmapToRender.Width })
+                .ToList();
+
+            // Use PLINQ to parallelize the processing of pixel coordinates
+            Parallel.ForEach(pixelCoordinates, pixel =>
+            {
+
+                // Calculate the 3D position for the current pixel
+                Vector2 screenPos2D = Geometry.FindIntersectionOnScreen(new Vector3(pixel.X, pixel.Y, 0), cameraPosition, screenNormal);
+
+                // Perform distortion calculation here
+                // You might need to call a function or do some computation here
+                Vector2 distortedPoint = ScreenDistortion.DistortPoint(screenPos2D, 400, 300);
+                // Calculate the corresponding row and column in the frame
+                int row = (int)(distortedPoint.Y / cellSize);
+                int col = (int)(distortedPoint.X / cellSize);
+
+                // Check if the current pixel is within the frame bounds
+                if (col >= 0 && col < Width && row >= 0 && row < Height)
+                {
+                    Color c = bitmapToRender.GetPixel(pixel.X, pixel.Y);
+                    MyColor mc = new MyColor(c.R, c.G, c.B);
+
+                    // Set the color in the frame
+                    SetColor(row, col, mc);
+                }
+            });
+        }
+
+
+
+
+
 
         private bool IsValidIndex(int row, int column)
         {

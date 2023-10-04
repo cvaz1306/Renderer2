@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Drawing.Imaging;
 namespace Renderer2
 {
     internal static class Program
@@ -17,6 +19,23 @@ namespace Renderer2
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+            
         }
     }
+}
+class P1
+{
+/*    public static void X()
+    {
+
+
+        Bitmap x = CaptureScreen();
+        using (var graphics = Control.CreateGraphics())
+        {
+            graphics.DrawImage(x, 0, 0);
+
+            //graphics.DrawImage(screenCapture, 0, 0);
+        }
+    }*/
+    
 }
