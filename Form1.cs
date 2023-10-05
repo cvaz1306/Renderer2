@@ -16,7 +16,7 @@ namespace Renderer2
         public int Hue;
         private Frame frame;
         private Timer animationTimer;
-        private int currentFrame = 0;
+        //private int currentFrame = 0;
         Bitmap webcam1 = new Bitmap(1920, 1080);
         Vector3 pointIn3DSpace1 = new Vector3(-7, 5, 20);
         Vector3 pointIn3DSpace2 = new Vector3(-7, -5, 20);
