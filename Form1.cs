@@ -4,11 +4,11 @@ using System.Windows.Forms;
 using System.Numerics;
 using Renderer2;
 using System.Drawing.Imaging;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
+using Emgu.CV;
+using static System.Net.Mime.MediaTypeNames;
+using System.Drawing.Drawing2D;
 
 namespace Renderer2
 {
@@ -30,7 +30,7 @@ namespace Renderer2
         Bitmap screenCapture;
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
-        bool wii=false;
+        bool wii = false;
         private void InitializeWebcam()
         {
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -39,32 +39,37 @@ namespace Renderer2
                 MessageBox.Show("No video devices found.");
                 return;
             }
-
-            videoSource = new VideoCaptureDevice(videoDevices[0].MonikerString);
+            Console.WriteLine("Video Devices: " + videoDevices.Count);
+            videoSource = new VideoCaptureDevice(videoDevices[2].MonikerString);
             videoSource.NewFrame += new NewFrameEventHandler(VideoSource_NewFrame);
             videoSource.Start();
-            
+
         }
         private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             wii = true;
             Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone();
+
+            webcam1 = (Bitmap)bitmap.Clone();
             bitmap.Dispose();
-            webcam1=(Bitmap)bitmap.Clone();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             primaryScreen = Screen.PrimaryScreen;
             screenBounds = primaryScreen.Bounds;
-            
+
             screenCapture = new Bitmap(screenBounds.Width, screenBounds.Height);
             InitializeWebcam();
+        }
+        private void fc(Object sender, FormClosingEventArgs e)
+        {
+            videoSource.Stop();
         }
         public Form1()
         {
             InitializeComponent();
-
+            this.FormClosing += fc;
             // Create a frame with 300 rows, 400 columns, and a cell size of 2 pixels
             frame = new Frame(300, 400, 1);
 
@@ -80,46 +85,46 @@ namespace Renderer2
 
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
+            Console.WriteLine("hello");
+            /*            this.Angle1.Text = (this.trackBar1.Value).ToString();
+                        this.Angle2.Text = (this.trackBar2.Value).ToString();
+                        this.Angle3.Text = (this.trackBar3.Value).ToString();
+                        Point screenMousePos = Control.MousePosition;
+                        Point clientMousePos = PointToClient(screenMousePos);
 
-/*            this.Angle1.Text = (this.trackBar1.Value).ToString();
-            this.Angle2.Text = (this.trackBar2.Value).ToString();
-            this.Angle3.Text = (this.trackBar3.Value).ToString();
-            Point screenMousePos = Control.MousePosition;
-            Point clientMousePos = PointToClient(screenMousePos);
+                        int mouseX = clientMousePos.X;
+                        int mouseY = clientMousePos.Y;
 
-            int mouseX = clientMousePos.X;
-            int mouseY = clientMousePos.Y;
+                        Vector3 screenNormal = Geometry.CalculateScreenNormal((float)this.trackBar1.Value, (float)this.trackBar2.Value, (float)this.trackBar3.Value); // Replace with your screen center.
+                        Vector3 screenCenter = new Vector3(0.0f+this.trackBar4.Value/25, 0.0f+this.trackBar5.Value/25, 1.0f+this.trackBar6.Value/25); // Replace with your screen normal vector.
 
-            Vector3 screenNormal = Geometry.CalculateScreenNormal((float)this.trackBar1.Value, (float)this.trackBar2.Value, (float)this.trackBar3.Value); // Replace with your screen center.
-            Vector3 screenCenter = new Vector3(0.0f+this.trackBar4.Value/25, 0.0f+this.trackBar5.Value/25, 1.0f+this.trackBar6.Value/25); // Replace with your screen normal vector.
-
-            Vector2 intersection1 = Geometry.FindIntersectionOnScreen(pointIn3DSpace1, screenCenter, screenNormal);
-            Vector2 intersection2 = Geometry.FindIntersectionOnScreen(pointIn3DSpace2, screenCenter, screenNormal);
-            Vector2 intersection3 = Geometry.FindIntersectionOnScreen(pointIn3DSpace3, screenCenter, screenNormal);
-            Vector2 intersection4 = Geometry.FindIntersectionOnScreen(pointIn3DSpace4, screenCenter, screenNormal);
+                        Vector2 intersection1 = Geometry.FindIntersectionOnScreen(pointIn3DSpace1, screenCenter, screenNormal);
+                        Vector2 intersection2 = Geometry.FindIntersectionOnScreen(pointIn3DSpace2, screenCenter, screenNormal);
+                        Vector2 intersection3 = Geometry.FindIntersectionOnScreen(pointIn3DSpace3, screenCenter, screenNormal);
+                        Vector2 intersection4 = Geometry.FindIntersectionOnScreen(pointIn3DSpace4, screenCenter, screenNormal);
 
 
 
-            UpdateFrame();
-            frame.SetColor((int)intersection1.Y + 150, (int)intersection1.X + 200, new MyColor(0, 0, 0));
-            frame.SetColor((int)intersection2.Y + 150, (int)intersection2.X + 200, new MyColor(255, 0, 0));
-            frame.SetColor((int)intersection3.Y + 150, (int)intersection3.X + 200, new MyColor(0, 255, 0));
-            frame.SetColor((int)intersection4.Y + 150, (int)intersection4.X + 200, new MyColor(0, 0, 255));
+                        UpdateFrame();
+                        frame.SetColor((int)intersection1.Y + 150, (int)intersection1.X + 200, new MyColor(0, 0, 0));
+                        frame.SetColor((int)intersection2.Y + 150, (int)intersection2.X + 200, new MyColor(255, 0, 0));
+                        frame.SetColor((int)intersection3.Y + 150, (int)intersection3.X + 200, new MyColor(0, 255, 0));
+                        frame.SetColor((int)intersection4.Y + 150, (int)intersection4.X + 200, new MyColor(0, 0, 255));
 
-*//*            frame.AddLine(intersection1 * 2, intersection3 * 2, new MyColor(255, 0, 0));
-            frame.AddLine(intersection3 * 2, intersection4 * 2, new MyColor(0, 255, 0));
-            frame.AddLine(intersection2 * 2, intersection4 * 2, new MyColor(0, 0, 255));
-            frame.AddLine(intersection1 * 2, intersection2 * 2, new MyColor(0, 255, 255));*//*
-            frame.AddLine(pointIn3DSpace1, pointIn3DSpace3, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
-            frame.AddLine(pointIn3DSpace3, pointIn3DSpace4, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
-            frame.AddLine(pointIn3DSpace2, pointIn3DSpace4, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
-            frame.AddLine(pointIn3DSpace1, pointIn3DSpace2, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
-            Rectangle bounds = primaryScreen.Bounds;
-            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
-            {
-                frame.RenderBitmap(bitmap, new Vector3[] { new Vector3(-7f, 5f, 5f), new Vector3(7f, 5f, 5f), new Vector3(-7f, -5f, 5f), new Vector3(7f, -5f, 0f) }, screenCenter, screenNormal);
-            }
-            */
+            *//*            frame.AddLine(intersection1 * 2, intersection3 * 2, new MyColor(255, 0, 0));
+                        frame.AddLine(intersection3 * 2, intersection4 * 2, new MyColor(0, 255, 0));
+                        frame.AddLine(intersection2 * 2, intersection4 * 2, new MyColor(0, 0, 255));
+                        frame.AddLine(intersection1 * 2, intersection2 * 2, new MyColor(0, 255, 255));*//*
+                        frame.AddLine(pointIn3DSpace1, pointIn3DSpace3, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
+                        frame.AddLine(pointIn3DSpace3, pointIn3DSpace4, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
+                        frame.AddLine(pointIn3DSpace2, pointIn3DSpace4, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
+                        frame.AddLine(pointIn3DSpace1, pointIn3DSpace2, new MyColor(0, 0, 0), screenCenter, screenNormal, screenCenter);
+                        Rectangle bounds = primaryScreen.Bounds;
+                        using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+                        {
+                            frame.RenderBitmap(bitmap, new Vector3[] { new Vector3(-7f, 5f, 5f), new Vector3(7f, 5f, 5f), new Vector3(-7f, -5f, 5f), new Vector3(7f, -5f, 0f) }, screenCenter, screenNormal);
+                        }
+                        */
             RenderFrame();
         }
 
@@ -143,38 +148,85 @@ namespace Renderer2
 
             return newImage;
         }
-        int frameCt=0;
+        int frameCt = 0;
         private void RenderFrame()
         {
             Color x = Color.FromArgb(255, 255, 255);
             frameCt++;
             /*using (var bitmap = frame.ToBitmap())
             {*/
-                using (var graphics = CreateGraphics())
-                {
-                    //graphics.DrawImage(bitmap, 0, 0);
-                    Bitmap S = CaptureScreenX();
-
-                using (var q = Graphics.FromImage(new Bitmap(1048, 720)))
-                {
-                    if (frameCt % 10 == 0)
-                    {
-                        Bitmap sx = new Bitmap(1920, 1080);
-                        //graphics.Clear(x);
-                    }
+            using (var graphics = CreateGraphics())
+            {
+                //graphics.DrawImage(bitmap, 0, 0);
+                Bitmap S = CaptureScreenX();
 
 
-                    if (wii) graphics.DrawImage(webcam1, 0, 0);
+                    int wx = (int)(1920 / ((float)this.v1.Value / 10));
+                    int hy = (int)(1080 / ((float)this.v1.Value / 10));
+                    int offsetX = 1920 - (int)((float)wx / 2);
+                    int offsetY = 1080 - (int)((float)hy / 2);
+
+                    if (true) try { graphics.DrawImage(overlayBitmaps( webcam1, scaleBitmap(S, wx, hy)), 0, 0, 1920, 1240); } catch (Exception e) { Console.WriteLine(e.ToString() +"\n"+ e.StackTrace.ToString()); }
                     webcam1.Dispose();
-                    graphics.DrawImage(S, 0, 0, (int)(1920 / ((float)this.v1.Value/10)), (int)(1080 / ((float)this.v1.Value/10)));
+                    //graphics.DrawImage(S, 0, 0, (int)(1920 / ((float)this.v1.Value/10)), (int)(1080 / ((float)this.v1.Value/10)));
                     graphics.Dispose();
-                    //graphics.DrawImage(S, 0, 0);
+                //graphics.DrawImage(S, 0, 0);
+                
                     S.Dispose();
-                }
-                }
+                    
+                
+            }
             /*}
 */
         }
+        private Bitmap overlayBitmaps(Bitmap bitmap1, Bitmap bitmap2)
+        {
+            Bitmap result = new Bitmap(Math.Max(bitmap1.Width, bitmap2.Width), Math.Max(bitmap1.Height, bitmap2.Height));
+            using (Graphics g = Graphics.FromImage(result))
+            {
+                g.DrawImage(bitmap1, 0, 0);
+                g.DrawImage(bitmap2, 0, 0);
+
+            }
+            return result;
+        }
+        private Bitmap overlayBitmaps(Bitmap bitmap1, Bitmap bitmap2, int offsetX, int offsetY)
+        {
+            Bitmap result = new Bitmap(Math.Max(bitmap1.Width+offsetX, bitmap2.Width+offsetX), Math.Max(bitmap1.Height+offsetY, bitmap2.Height+offsetY));
+            using (Graphics g = Graphics.FromImage(result))
+            {
+                g.DrawImage(bitmap1, offsetX, offsetY);
+                g.DrawImage(bitmap2, 0, 0);
+
+            }
+            return result;
+        }
+        private Bitmap scaleBitmap(Bitmap bitmap1, int width, int height)
+        {
+            var image = (System.Drawing.Image)bitmap1;
+            Bitmap result = new Bitmap(width, height);
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+            result =(Bitmap)destImage;
+            return result;
+        }
+
         public static Bitmap CaptureScreenX()
         {
             try
@@ -223,7 +275,7 @@ namespace Renderer2
                 BitmapData blurredData = blurred.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, blurred.PixelFormat);
 
                 // Get bits per pixel for current PixelFormat
-                int bitsPerPixel = Image.GetPixelFormatSize(blurred.PixelFormat);
+                int bitsPerPixel = System.Drawing.Image.GetPixelFormatSize(blurred.PixelFormat);
 
                 // Get pointer to first line
                 byte* scan0 = (byte*)blurredData.Scan0.ToPointer();
@@ -321,7 +373,7 @@ namespace Renderer2
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            
+
         }
         static void HandleFrameCaptured(Bitmap frame)
         {
@@ -344,5 +396,4 @@ public class MyColor
         B = b;
     }
 }
-
 

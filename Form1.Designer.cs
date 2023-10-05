@@ -220,6 +220,7 @@
             // v1
             // 
             this.v1.Location = new System.Drawing.Point(9, 9);
+            this.v1.Maximum = 10000;
             this.v1.Minimum = 1;
             this.v1.Name = "v1";
             this.v1.Size = new System.Drawing.Size(1185, 17);
