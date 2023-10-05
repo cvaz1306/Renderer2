@@ -4,9 +4,6 @@ using System.Windows.Forms;
 using System.Numerics;
 using Renderer2;
 using System.Drawing.Imaging;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
 
@@ -164,12 +161,12 @@ namespace Renderer2
                         //graphics.Clear(x);
                     }
 
-                    int wx = (int)(1920 / ((float)this.v1.Value / 10));
-                    int hy = (int)(1080 / ((float)this.v1.Value / 10));
+                    int wx = (int)(1920 / ((float)this.v1.Value / 100));
+                    int hy = (int)(1080 / ((float)this.v1.Value / 100));
                     int offsetX = 1920 - (int)((float)wx / 2);
                     int offsetY = 1080 - (int)((float)hy / 2);
 
-                    if (wii) try { graphics.DrawImage(overlayBitmaps(webcam1, scaleBitmap(S, wx, hy)), 0, 0, 1920, 1080); } catch(Exception) { }
+                    if (wii) try { graphics.DrawImage(overlayBitmaps(webcam1, scaleBitmap(S, wx, hy), this.trackBar1.Value, this.trackBar2.Value), 0, 0, 1920, 1080); } catch(Exception) { }
                     webcam1.Dispose();
                     //graphics.DrawImage(S, 0, 0, (int)(1920 / ((float)this.v1.Value/10)), (int)(1080 / ((float)this.v1.Value/10)));
                     graphics.Dispose();
@@ -196,8 +193,8 @@ namespace Renderer2
             Bitmap result = new Bitmap(Math.Max(bitmap1.Width, bitmap2.Width), Math.Max(bitmap1.Height, bitmap2.Height));
             using (Graphics g = Graphics.FromImage(result))
             {
-                g.DrawImage(bitmap1, offsetX, offsertY);
-                g.DrawImage(bitmap2, 0, 0);
+                g.DrawImage(bitmap1, 0,0);
+                g.DrawImage(bitmap2, offsetX, offsertY);
 
             }
             return result;
