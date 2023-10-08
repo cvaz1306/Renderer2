@@ -18,7 +18,8 @@ namespace Renderer2
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Form1 sxABC = new Form1();
+            Application.Run(sxABC);
             
         }
     }

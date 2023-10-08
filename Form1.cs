@@ -7,8 +7,8 @@ using System.Drawing.Imaging;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using AForge.Video;
-using AForge.Video.DirectShow;
+using Accord.Video;
+using Accord.Video.DirectShow;
 
 namespace Renderer2
 {
@@ -17,7 +17,6 @@ namespace Renderer2
 
 
         public int Hue;
-        private Frame frame;
         private Timer animationTimer;
         private int currentFrame = 0;
         Bitmap webcam1 = new Bitmap(1920, 1080);
@@ -31,6 +30,7 @@ namespace Renderer2
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
         bool wii=false;
+        public int scale;
         private void InitializeWebcam()
         {
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -42,16 +42,14 @@ namespace Renderer2
 
             videoSource = new VideoCaptureDevice(videoDevices[2].MonikerString);
             videoSource.NewFrame += new NewFrameEventHandler(VideoSource_NewFrame);
+            
             videoSource.Start();
             
         }
         private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            wii = true;
-            Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone();
-            
-            webcam1=(Bitmap)bitmap.Clone();
-            bitmap.Dispose();
+            webcam1 = (Bitmap)eventArgs.Frame.Clone();
+            Console.WriteLine("HHHHH");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -67,12 +65,6 @@ namespace Renderer2
         {
             InitializeComponent();
 
-            // Create a frame with 300 rows, 400 columns, and a cell size of 2 pixels
-            frame = new Frame(300, 400, 1);
-
-            // Initialize the frame with random colors
-            //frame.FillWithRandomColors();
-
             // Set up a timer for animation
             animationTimer = new Timer();
             animationTimer.Interval = 1; // Adjust the interval as needed for your desired frame rate
@@ -82,14 +74,10 @@ namespace Renderer2
 
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
-
+            Console.WriteLine("VFR: " + this.videoSource.FramesReceived);
             RenderFrame();
         }
 
-        private void UpdateFrame()
-        {
-            frame.FillWithColor(new MyColor(240, 255, 255));
-        }
         static Bitmap ScaleImage(Bitmap bmp, int maxWidth, int maxHeight)
         {
             var ratioX = (double)maxWidth / bmp.Width;
@@ -117,6 +105,7 @@ namespace Renderer2
                 {
                 //graphics.DrawImage(bitmap, 0, 0);
                 Bitmap S = CaptureScreenX();
+                scale = this.v1.Value;
                 int wx = (int)(1920 / ((float)this.v1.Value / 10));
                 int hy = (int)(1080 / ((float)this.v1.Value / 10));
                 int offsetX = 1920 - (int)((float)wx / 2);
@@ -130,6 +119,7 @@ namespace Renderer2
                 if(S!=null) S.Dispose();
                 
                 }
+                
             /*}
 */
         }
@@ -164,6 +154,7 @@ namespace Renderer2
                 g.DrawImage(bitmap1, 0, 0, width, height);//, width, height);//, width, height);
 
             }
+            bitmap1.Dispose();
             return result;
         }
 
@@ -228,10 +219,7 @@ namespace Renderer2
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            pointIn3DSpace1 = new Vector3(-7, 5, -6);
-            pointIn3DSpace2 = new Vector3(-7, -5, -6);
-            pointIn3DSpace3 = new Vector3(7, 5, -6);
-            pointIn3DSpace4 = new Vector3(7, -5, -6);
+            if(videoSource.IsRunning) videoSource.Stop(); else videoSource.Start();
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)

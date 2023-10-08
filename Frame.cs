@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -56,21 +56,6 @@ namespace Renderer2
                 for (int j = 0; j < Columns; j++)
                 {
                     colorMatrix[i, j] = color;
-                }
-            }
-        }
-
-        public void FillWithRandomColors()
-        {
-            Random rand = new Random();
-            for (int i = 0; i < Rows; i++)
-            {
-                for (int j = 0; j < Columns; j++)
-                {
-                    int r = rand.Next(256);
-                    int g = rand.Next(256);
-                    int b = rand.Next(256);
-                    colorMatrix[i, j] = new MyColor(r, g, b);
                 }
             }
         }
@@ -359,3 +344,4 @@ namespace Renderer2
     }
 
 }
+*/
