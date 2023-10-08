@@ -43,7 +43,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.FOV = new System.Windows.Forms.TrackBar();
+            this.CID = new System.Windows.Forms.TrackBar();
             this.v1 = new System.Windows.Forms.HScrollBar();
             this.resol = new System.Windows.Forms.HScrollBar();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -54,7 +54,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBar6)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FOV)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CID)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -207,16 +207,15 @@
             this.panel2.Size = new System.Drawing.Size(444, 167);
             this.panel2.TabIndex = 4;
             // 
-            // FOV
+            // CID
             // 
-            this.FOV.LargeChange = 1;
-            this.FOV.Location = new System.Drawing.Point(749, 547);
-            this.FOV.Minimum = 1;
-            this.FOV.Name = "FOV";
-            this.FOV.Size = new System.Drawing.Size(407, 45);
-            this.FOV.TabIndex = 1;
-            this.FOV.Value = 1;
-            this.FOV.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.CID.LargeChange = 1;
+            this.CID.Location = new System.Drawing.Point(749, 547);
+            this.CID.Maximum = 0;
+            this.CID.Name = "CID";
+            this.CID.Size = new System.Drawing.Size(407, 45);
+            this.CID.TabIndex = 1;
+            this.CID.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // v1
             // 
@@ -247,7 +246,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.FOV);
+            this.Controls.Add(this.CID);
             this.Name = "Form1";
             this.Text = "Virtual Displays";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -261,7 +260,7 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FOV)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CID)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -284,7 +283,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TrackBar FOV;
+        private System.Windows.Forms.TrackBar CID;
         private System.Windows.Forms.HScrollBar v1;
         private System.Windows.Forms.HScrollBar resol;
     }

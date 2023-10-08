@@ -31,7 +31,7 @@ namespace Renderer2
         private VideoCaptureDevice videoSource;
         bool wii=false;
         public int scale;
-        private void InitializeWebcam()
+        private void InitializeWebcam(int xy)
         {
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             if (videoDevices.Count == 0)
@@ -39,12 +39,12 @@ namespace Renderer2
                 MessageBox.Show("No video devices found.");
                 return;
             }
-
-            videoSource = new VideoCaptureDevice(videoDevices[2].MonikerString);
+            videoSource = new VideoCaptureDevice(videoDevices[xy].MonikerString);
             videoSource.NewFrame += new NewFrameEventHandler(VideoSource_NewFrame);
-            
+
             videoSource.Start();
-            
+
+
         }
         private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
@@ -59,7 +59,7 @@ namespace Renderer2
             
             screenCapture = new Bitmap(screenBounds.Width, screenBounds.Height);
             screenCapture.Dispose();
-            InitializeWebcam();
+            InitializeWebcam(2);
         }
         public Form1()
         {
@@ -74,6 +74,7 @@ namespace Renderer2
 
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
+            CID.Maximum= Math.Max(new FilterInfoCollection(FilterCategory.VideoInputDevice).Count - 1, 0);
             Console.WriteLine("VFR: " + this.videoSource.FramesReceived);
             RenderFrame();
         }
@@ -224,7 +225,7 @@ namespace Renderer2
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            
+            InitializeWebcam(CID.Value);
         }
         static void HandleFrameCaptured(Bitmap frame)
         {
