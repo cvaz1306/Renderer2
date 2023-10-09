@@ -1,12 +1,8 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Numerics;
 using Renderer2;
 using System.Drawing.Imaging;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 using Accord.Video;
 using Accord.Video.DirectShow;
 
@@ -20,16 +16,11 @@ namespace Renderer2
         private Timer animationTimer;
         private int currentFrame = 0;
         Bitmap webcam1 = new Bitmap(1920, 1080);
-        Vector3 pointIn3DSpace1 = new Vector3(-7, 5, 20);
-        Vector3 pointIn3DSpace2 = new Vector3(-7, -5, 20);
-        Vector3 pointIn3DSpace3 = new Vector3(7, 5, 20);
-        Vector3 pointIn3DSpace4 = new Vector3(7, -5, 20);
         Screen primaryScreen;
         Rectangle screenBounds;
-        Bitmap screenCapture;
+        
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
-        bool wii=false;
         public int scale;
         private void InitializeWebcam(int xy)
         {
@@ -39,11 +30,12 @@ namespace Renderer2
                 MessageBox.Show("No video devices found.");
                 return;
             }
+            
             videoSource = new VideoCaptureDevice(videoDevices[xy].MonikerString);
             videoSource.NewFrame += new NewFrameEventHandler(VideoSource_NewFrame);
 
             videoSource.Start();
-
+            videoDevices.Clear();
 
         }
         private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
@@ -57,8 +49,6 @@ namespace Renderer2
             primaryScreen = Screen.PrimaryScreen;
             screenBounds = primaryScreen.Bounds;
             
-            screenCapture = new Bitmap(screenBounds.Width, screenBounds.Height);
-            screenCapture.Dispose();
             InitializeWebcam(2);
         }
         public Form1()
@@ -77,6 +67,7 @@ namespace Renderer2
             CID.Maximum= Math.Max(new FilterInfoCollection(FilterCategory.VideoInputDevice).Count - 1, 0);
             Console.WriteLine("VFR: " + this.videoSource.FramesReceived);
             RenderFrame();
+            
         }
 
         static Bitmap ScaleImage(Bitmap bmp, int maxWidth, int maxHeight)
@@ -98,8 +89,13 @@ namespace Renderer2
         int frameCt=0;
         private void RenderFrame()
         {
+            
             Color x = Color.FromArgb(255, 255, 255);
             frameCt++;
+            if (frameCt % 180 == 0)
+            {
+                GC.Collect();
+            }
             /*using (var bitmap = frame.ToBitmap())
             {*/
                 using (var graphics = CreateGraphics())
@@ -107,19 +103,20 @@ namespace Renderer2
                 //graphics.DrawImage(bitmap, 0, 0);
                 Bitmap S = CaptureScreenX();
                 scale = this.v1.Value;
-                int wx = (int)(1920 / ((float)this.v1.Value / 10));
-                int hy = (int)(1080 / ((float)this.v1.Value / 10));
+                int wx = (int)(1920 / ((float)v1.Value / 10));
+                int hy = (int)(1080 / ((float)v1.Value / 10));
                 int offsetX = 1920 - (int)((float)wx / 2);
                 int offsetY = 1080 - (int)((float)hy / 2);
                 Console.WriteLine("WX: " + wx);
                 if (S != null) try { graphics.DrawImage(overlayBitmaps(webcam1, scaleBitmap(S, wx, hy), this.trackBar1.Value, this.trackBar2.Value), 0, 0, 1920, 1080); } catch(Exception) { }
                 webcam1.Dispose();
-                //graphics.DrawImage(S, 0, 0, (int)(1920 / ((float)this.v1.Value/10)), (int)(1080 / ((float)this.v1.Value/10)));
+                
                 graphics.Dispose();
-                //graphics.DrawImage(S, 0, 0);
+                
                 if(S!=null) S.Dispose();
                 
-                }
+
+            }
                 
             /*}
 */
@@ -225,12 +222,7 @@ namespace Renderer2
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            InitializeWebcam(CID.Value);
-        }
-        static void HandleFrameCaptured(Bitmap frame)
-        {
-            // Handle the captured frame here
-            // For example, save it to a file or display it
+            //InitializeWebcam(CID.Value);
         }
     }
 }
