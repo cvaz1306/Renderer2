@@ -18,10 +18,9 @@ namespace Renderer2
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Form1 sxABC = new Form1();
+            Form1 sxABC = new Form1(180, "180");
             Application.Run(sxABC);
-            
-        }
+            }
     }
 }
 class P1

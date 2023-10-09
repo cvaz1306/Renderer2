@@ -18,7 +18,7 @@ namespace Renderer2
         Bitmap webcam1 = new Bitmap(1920, 1080);
         Screen primaryScreen;
         Rectangle screenBounds;
-        
+        int interval;
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
         public int scale;
@@ -57,12 +57,31 @@ namespace Renderer2
 
             // Set up a timer for animation
             animationTimer = new Timer();
+            animationTimer.Interval = 10; // Adjust the interval as needed for your desired frame rate
+            animationTimer.Tick += AnimationTimer_Tick;
+            animationTimer.Start();
+            //this.OnClosing += formclosed;
+        }
+        public Form1(int inte, string t)
+        {
+            InitializeComponent();
+
+            // Set up a timer for animation
+            animationTimer = new Timer();
             animationTimer.Interval = 1; // Adjust the interval as needed for your desired frame rate
             animationTimer.Tick += AnimationTimer_Tick;
             animationTimer.Start();
+            interval = inte;
+            this.Text = t;
+            //this.OnClosing += formclosed;
+            this.FormClosing += MainForm_FormClosing;
+        }
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(webcam1!=null) videoSource.SignalToStop();
         }
 
-        private void AnimationTimer_Tick(object sender, EventArgs e)
+            private void AnimationTimer_Tick(object sender, EventArgs e)
         {
             CID.Maximum= Math.Max(new FilterInfoCollection(FilterCategory.VideoInputDevice).Count - 1, 0);
             Console.WriteLine("VFR: " + this.videoSource.FramesReceived);
