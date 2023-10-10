@@ -75,6 +75,7 @@
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(407, 45);
             this.trackBar1.TabIndex = 1;
+            this.trackBar1.Value = 86;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // trackBar2
@@ -85,6 +86,7 @@
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Size = new System.Drawing.Size(407, 45);
             this.trackBar2.TabIndex = 1;
+            this.trackBar2.Value = 86;
             this.trackBar2.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // trackBar3
@@ -224,7 +226,7 @@
             this.v1.Name = "v1";
             this.v1.Size = new System.Drawing.Size(1185, 17);
             this.v1.TabIndex = 5;
-            this.v1.Value = 1;
+            this.v1.Value = 10;
             // 
             // resol
             // 
