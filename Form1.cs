@@ -241,7 +241,7 @@ namespace Renderer2
                     return captureBitmap;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Handle any exceptions that may occur during screen capture
                 return null;
