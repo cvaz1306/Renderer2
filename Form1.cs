@@ -5,6 +5,7 @@ using Renderer2;
 using System.Drawing.Imaging;
 using Accord.Video;
 using Accord.Video.DirectShow;
+using Accord.Vision.Detection;
 
 namespace Renderer2
 {
@@ -29,7 +30,10 @@ namespace Renderer2
         public int scale;
         int wx, hy;
         int offsetX, offsetY;
+        Accord.Vision.Detection.Cascades.FaceHaarCascade cascade = new Accord.Vision.Detection.Cascades.FaceHaarCascade();
+        HaarObjectDetector detector;
         private void InitializeWebcam(int xy)
+
         {
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             if (videoDevices.Count == 0)
@@ -48,6 +52,8 @@ namespace Renderer2
         private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             webcam1 = (Bitmap)eventArgs.Frame.Clone();
+            Rectangle[] rectangles = detector.ProcessFrame(webcam1);
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -55,12 +61,13 @@ namespace Renderer2
             primaryScreen = Screen.PrimaryScreen;
             screenBounds = primaryScreen.Bounds;
             
-            InitializeWebcam(0);
+            InitializeWebcam(2);
         }
         public Form1()
         {
             InitializeComponent();
-
+            detector = new HaarObjectDetector(this.cascade, minSize: 50,
+    searchMode: ObjectDetectorSearchMode.NoOverlap);
             // Set up a timer for animation
             animationTimer = new Timer();
             animationTimer.Interval = 10; // Adjust the interval as needed for your desired frame rate
@@ -112,14 +119,14 @@ namespace Renderer2
             scale = this.v1.Value;
             wx = (int)(1920 / ((float)v1.Value / 10));
             hy = (int)(1080 / ((float)v1.Value / 10));
-            offsetX = 1920 - (int)((float)wx / 2);
-            offsetY = 1080 - (int)((float)hy / 2);
+            offsetX = -wx/8;
+            offsetY = -hy/8;
 
         }
         private void AnimationTimer_Tick2(object sender, EventArgs e)
         {
             if (S != null) try { scaledMirror = scaleBitmap(S, wx, hy); } catch (Exception) { }
-            if (S != null) try { finalImage = overlayBitmaps(webcam1, scaledMirror, this.trackBar1.Value, -this.trackBar2.Value+180); } catch (Exception) { }
+            if (S != null) try { finalImage = overlayBitmaps(webcam1, scaledMirror, this.trackBar1.Value+180+offsetX, -this.trackBar2.Value+360+offsetY); } catch (Exception) { }
 
 
         }
