@@ -56,7 +56,7 @@ namespace Renderer2
             primaryScreen = Screen.PrimaryScreen;
             screenBounds = primaryScreen.Bounds;
             
-            InitializeWebcam(2);
+            InitializeWebcam(0);
         }
         public Form1()
         {
