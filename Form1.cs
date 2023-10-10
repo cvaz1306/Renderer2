@@ -151,7 +151,7 @@ namespace Renderer2
         private void AnimationTimer_Tick2(object sender, EventArgs e)
         {
             if (S != null) try { scaledMirror = scaleBitmap(S, wx, hy); } catch (Exception) { }
-            if (S != null) try { finalImage = overlayBitmaps(webcam1, scaledMirror, this.trackBar1.Value, this.trackBar2.Value); } catch (Exception) { }
+            if (S != null) try { finalImage = overlayBitmaps(webcam1, scaledMirror, this.trackBar1.Value, -this.trackBar2.Value+180); } catch (Exception) { }
 
 
         }
