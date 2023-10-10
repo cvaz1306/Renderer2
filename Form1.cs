@@ -73,7 +73,6 @@ namespace Renderer2
             animationTimer.Start();
             interval = inte;
             this.Text = t;
-            //this.OnClosing += formclosed;
             this.FormClosing += MainForm_FormClosing;
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -132,7 +131,7 @@ namespace Renderer2
                 
                 graphics.Dispose();
                 
-                if(S!=null) S.Dispose();
+                S?.Dispose();
                 
 
             }

@@ -71,7 +71,7 @@
             // 
             this.trackBar1.LargeChange = 2;
             this.trackBar1.Location = new System.Drawing.Point(18, 15);
-            this.trackBar1.Maximum = 360;
+            this.trackBar1.Maximum = 180;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(407, 45);
             this.trackBar1.TabIndex = 1;
@@ -81,7 +81,7 @@
             // 
             this.trackBar2.LargeChange = 2;
             this.trackBar2.Location = new System.Drawing.Point(18, 66);
-            this.trackBar2.Maximum = 360;
+            this.trackBar2.Maximum = 180;
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Size = new System.Drawing.Size(407, 45);
             this.trackBar2.TabIndex = 1;
