@@ -14,14 +14,21 @@ namespace Renderer2
 
         public int Hue;
         private Timer animationTimer;
+        private Timer animationTimer2;
+        private Timer animationTimer3;
         private int currentFrame = 0;
         Bitmap webcam1 = new Bitmap(1920, 1080);
+        Bitmap S = new Bitmap(1920, 1080);
+        Bitmap scaledMirror = new Bitmap(1920, 1080);
+        Bitmap finalImage = new Bitmap(1920, 1080);
         Screen primaryScreen;
         Rectangle screenBounds;
         int interval;
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
         public int scale;
+        int wx, hy;
+        int offsetX, offsetY;
         private void InitializeWebcam(int xy)
         {
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -60,6 +67,16 @@ namespace Renderer2
             animationTimer.Interval = 10; // Adjust the interval as needed for your desired frame rate
             animationTimer.Tick += AnimationTimer_Tick;
             animationTimer.Start();
+
+            animationTimer2 = new Timer();
+            animationTimer2.Interval = 10; // Adjust the interval as needed for your desired frame rate
+            animationTimer2.Tick += AnimationTimer_Tick;
+            animationTimer2.Start();
+
+            animationTimer3 = new Timer();
+            animationTimer3.Interval = 10; // Adjust the interval as needed for your desired frame rate
+            animationTimer3.Tick += AnimationTimer_Tick;
+            animationTimer3.Start();
             //this.OnClosing += formclosed;
         }
         public Form1(int inte, string t)
@@ -71,6 +88,16 @@ namespace Renderer2
             animationTimer.Interval = 1; // Adjust the interval as needed for your desired frame rate
             animationTimer.Tick += AnimationTimer_Tick;
             animationTimer.Start();
+
+            animationTimer2 = new Timer();
+            animationTimer2.Interval = 1; // Adjust the interval as needed for your desired frame rate
+            animationTimer2.Tick += AnimationTimer_Tick2;
+            animationTimer2.Start();
+
+            animationTimer3 = new Timer();
+            animationTimer3.Interval = 1; // Adjust the interval as needed for your desired frame rate
+            animationTimer3.Tick += AnimationTimer_Tick3;
+            animationTimer3.Start();
             interval = inte;
             this.Text = t;
             this.FormClosing += MainForm_FormClosing;
@@ -79,15 +106,67 @@ namespace Renderer2
         {
             if(webcam1!=null) videoSource.SignalToStop();
         }
-
-            private void AnimationTimer_Tick(object sender, EventArgs e)
+        private void RenderFrame()
         {
-            CID.Maximum= Math.Max(new FilterInfoCollection(FilterCategory.VideoInputDevice).Count - 1, 0);
-            Console.WriteLine("VFR: " + this.videoSource.FramesReceived);
-            RenderFrame();
-            
-        }
 
+            Color x = Color.FromArgb(255, 255, 255);
+            frameCt++;
+            if (frameCt % 180 == 0)
+            {
+                GC.Collect();
+            }
+            /*using (var bitmap = frame.ToBitmap())
+            {*/
+            
+                //graphics.DrawImage(bitmap, 0, 0);
+                scale = this.v1.Value;
+                int wx = (int)(1920 / ((float)v1.Value / 10));
+                int hy = (int)(1080 / ((float)v1.Value / 10));
+                int offsetX = 1920 - (int)((float)wx / 2);
+                int offsetY = 1080 - (int)((float)hy / 2);
+                Console.WriteLine("WX: " + wx);
+/*                if (S != null) try { graphics.DrawImage(overlayBitmaps(webcam1, scaleBitmap(S, wx, hy), this.trackBar1.Value, this.trackBar2.Value), 0, 0, 1920, 1080); } catch (Exception) { }
+                webcam1.Dispose();
+
+                graphics.Dispose();*/
+
+                S?.Dispose();
+
+
+            
+
+            /*}
+*/
+        }
+        private void AnimationTimer_Tick(object sender, EventArgs e)
+        {
+            S = CaptureScreenX();
+            scale = this.v1.Value;
+            wx = (int)(1920 / ((float)v1.Value / 10));
+            hy = (int)(1080 / ((float)v1.Value / 10));
+            offsetX = 1920 - (int)((float)wx / 2);
+            offsetY = 1080 - (int)((float)hy / 2);
+
+        }
+        private void AnimationTimer_Tick2(object sender, EventArgs e)
+        {
+            if (S != null) try { scaledMirror = scaleBitmap(S, wx, hy); } catch (Exception) { }
+            if (S != null) try { finalImage = overlayBitmaps(webcam1, scaledMirror, this.trackBar1.Value, this.trackBar2.Value); } catch (Exception) { }
+
+
+        }
+        private void AnimationTimer_Tick3(object sender, EventArgs e)
+        {
+            frameCt++;
+            if (frameCt % 100 == 0)
+            {
+                GC.Collect();
+            }
+            using (var graphics = CreateGraphics())
+            {
+                try { graphics.DrawImage(finalImage, 0, 0); } catch (Exception) { }
+            }
+        }
         static Bitmap ScaleImage(Bitmap bmp, int maxWidth, int maxHeight)
         {
             var ratioX = (double)maxWidth / bmp.Width;
@@ -105,40 +184,7 @@ namespace Renderer2
             return newImage;
         }
         int frameCt=0;
-        private void RenderFrame()
-        {
-            
-            Color x = Color.FromArgb(255, 255, 255);
-            frameCt++;
-            if (frameCt % 180 == 0)
-            {
-                GC.Collect();
-            }
-            /*using (var bitmap = frame.ToBitmap())
-            {*/
-                using (var graphics = CreateGraphics())
-                {
-                //graphics.DrawImage(bitmap, 0, 0);
-                Bitmap S = CaptureScreenX();
-                scale = this.v1.Value;
-                int wx = (int)(1920 / ((float)v1.Value / 10));
-                int hy = (int)(1080 / ((float)v1.Value / 10));
-                int offsetX = 1920 - (int)((float)wx / 2);
-                int offsetY = 1080 - (int)((float)hy / 2);
-                Console.WriteLine("WX: " + wx);
-                if (S != null) try { graphics.DrawImage(overlayBitmaps(webcam1, scaleBitmap(S, wx, hy), this.trackBar1.Value, this.trackBar2.Value), 0, 0, 1920, 1080); } catch(Exception) { }
-                webcam1.Dispose();
-                
-                graphics.Dispose();
-                
-                S?.Dispose();
-                
-
-            }
-                
-            /*}
-*/
-        }
+        
         private Bitmap overlayBitmaps(Bitmap bitmap1, Bitmap bitmap2)
         {
             Bitmap result=new Bitmap(Math.Max(bitmap1.Width, bitmap2.Width), Math.Max(bitmap1.Height, bitmap2.Height));
