@@ -48,7 +48,6 @@ namespace Renderer2
         private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             webcam1 = (Bitmap)eventArgs.Frame.Clone();
-            Console.WriteLine("HHHHH");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -106,38 +105,7 @@ namespace Renderer2
         {
             if(webcam1!=null) videoSource.SignalToStop();
         }
-        private void RenderFrame()
-        {
-
-            Color x = Color.FromArgb(255, 255, 255);
-            frameCt++;
-            if (frameCt % 180 == 0)
-            {
-                GC.Collect();
-            }
-            /*using (var bitmap = frame.ToBitmap())
-            {*/
-            
-                //graphics.DrawImage(bitmap, 0, 0);
-                scale = this.v1.Value;
-                int wx = (int)(1920 / ((float)v1.Value / 10));
-                int hy = (int)(1080 / ((float)v1.Value / 10));
-                int offsetX = 1920 - (int)((float)wx / 2);
-                int offsetY = 1080 - (int)((float)hy / 2);
-                Console.WriteLine("WX: " + wx);
-/*                if (S != null) try { graphics.DrawImage(overlayBitmaps(webcam1, scaleBitmap(S, wx, hy), this.trackBar1.Value, this.trackBar2.Value), 0, 0, 1920, 1080); } catch (Exception) { }
-                webcam1.Dispose();
-
-                graphics.Dispose();*/
-
-                S?.Dispose();
-
-
-            
-
-            /*}
-*/
-        }
+        
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
             S = CaptureScreenX();
@@ -173,13 +141,13 @@ namespace Renderer2
             var ratioY = (double)maxHeight / bmp.Height;
             var ratio = Math.Min(ratioX, ratioY);
 
-            var newWidth = (int)(bmp.Width * ratio);
-            var newHeight = (int)(bmp.Height * ratio);
+            var newWidth = (int)(maxWidth);
+            var newHeight = (int)(maxHeight);
 
-            var newImage = new Bitmap(newWidth, newHeight);
+            var newImage = new Bitmap(maxWidth, maxHeight);
 
             using (var graphics = Graphics.FromImage(newImage))
-                graphics.DrawImage(bmp, 0, 0, newWidth, newHeight);
+                graphics.DrawImage(bmp, 0, 0, maxWidth, maxHeight);
 
             return newImage;
         }
@@ -209,7 +177,7 @@ namespace Renderer2
         }
         private Bitmap scaleBitmap(Bitmap bitmap1, int width, int height)
         {
-            Bitmap result = (Bitmap)bitmap1.Clone();//new Bitmap(width, height);
+            Bitmap result = new Bitmap(width, height);//new Bitmap(width, height);
             result.SetResolution(400,400);
             using (Graphics g = Graphics.FromImage(result))
             {
