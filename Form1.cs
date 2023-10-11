@@ -52,7 +52,7 @@ namespace Renderer2
         private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             webcam1 = (Bitmap)eventArgs.Frame.Clone();
-            Rectangle[] rectangles = detector.ProcessFrame(webcam1);
+            //Rectangle[] rectangles = detector.ProcessFrame(webcam1);
             
         }
 
@@ -61,7 +61,7 @@ namespace Renderer2
             primaryScreen = Screen.PrimaryScreen;
             screenBounds = primaryScreen.Bounds;
             
-            InitializeWebcam(2);
+            InitializeWebcam(0);
         }
         public Form1()
         {
