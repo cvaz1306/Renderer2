@@ -6,7 +6,6 @@ using System.Drawing.Imaging;
 using Accord.Video;
 using Accord.Video.DirectShow;
 using Accord.Vision.Detection;
-//Hello
 namespace Renderer2
 {
     public partial class Form1 : Form
@@ -52,7 +51,7 @@ namespace Renderer2
         private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             webcam1 = (Bitmap)eventArgs.Frame.Clone();
-            //Rectangle[] rectangles = detector.ProcessFrame(webcam1);
+            
             
         }
 
@@ -68,40 +67,40 @@ namespace Renderer2
             InitializeComponent();
             detector = new HaarObjectDetector(this.cascade, minSize: 50,
     searchMode: ObjectDetectorSearchMode.NoOverlap);
-            // Set up a timer for animation
+            
             animationTimer = new Timer();
-            animationTimer.Interval = 10; // Adjust the interval as needed for your desired frame rate
+            animationTimer.Interval = 10; 
             animationTimer.Tick += AnimationTimer_Tick;
             animationTimer.Start();
 
             animationTimer2 = new Timer();
-            animationTimer2.Interval = 10; // Adjust the interval as needed for your desired frame rate
+            animationTimer2.Interval = 10; 
             animationTimer2.Tick += AnimationTimer_Tick;
             animationTimer2.Start();
 
             animationTimer3 = new Timer();
-            animationTimer3.Interval = 10; // Adjust the interval as needed for your desired frame rate
+            animationTimer3.Interval = 10; 
             animationTimer3.Tick += AnimationTimer_Tick;
             animationTimer3.Start();
-            //this.OnClosing += formclosed;
+           
         }
         public Form1(int inte, string t)
         {
             InitializeComponent();
 
-            // Set up a timer for animation
+            
             animationTimer = new Timer();
-            animationTimer.Interval = 1; // Adjust the interval as needed for your desired frame rate
+            animationTimer.Interval = 1; 
             animationTimer.Tick += AnimationTimer_Tick;
             animationTimer.Start();
 
             animationTimer2 = new Timer();
-            animationTimer2.Interval = 1; // Adjust the interval as needed for your desired frame rate
+            animationTimer2.Interval = 1; 
             animationTimer2.Tick += AnimationTimer_Tick2;
             animationTimer2.Start();
 
             animationTimer3 = new Timer();
-            animationTimer3.Interval = 1; // Adjust the interval as needed for your desired frame rate
+            animationTimer3.Interval = 1; 
             animationTimer3.Tick += AnimationTimer_Tick3;
             animationTimer3.Start();
             interval = inte;
@@ -115,7 +114,7 @@ namespace Renderer2
         
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
-            S = CaptureScreenX();
+            S = CaptureScreenX(0);
             scale = this.v1.Value;
             wx = (int)(1920 / ((float)v1.Value / 10));
             hy = (int)(1080 / ((float)v1.Value / 10));
@@ -133,7 +132,7 @@ namespace Renderer2
         private void AnimationTimer_Tick3(object sender, EventArgs e)
         {
             frameCt++;
-            if (frameCt % 100 == 0)
+            if (frameCt % 50 == 0)
             {
                 GC.Collect();
             }
@@ -142,35 +141,8 @@ namespace Renderer2
                 try { graphics.DrawImage(finalImage, 0, 0); } catch (Exception) { }
             }
         }
-        static Bitmap ScaleImage(Bitmap bmp, int maxWidth, int maxHeight)
-        {
-            var ratioX = (double)maxWidth / bmp.Width;
-            var ratioY = (double)maxHeight / bmp.Height;
-            var ratio = Math.Min(ratioX, ratioY);
-
-            var newWidth = (int)(maxWidth);
-            var newHeight = (int)(maxHeight);
-
-            var newImage = new Bitmap(maxWidth, maxHeight);
-
-            using (var graphics = Graphics.FromImage(newImage))
-                graphics.DrawImage(bmp, 0, 0, maxWidth, maxHeight);
-
-            return newImage;
-        }
         int frameCt=0;
         
-        private Bitmap overlayBitmaps(Bitmap bitmap1, Bitmap bitmap2)
-        {
-            Bitmap result=new Bitmap(Math.Max(bitmap1.Width, bitmap2.Width), Math.Max(bitmap1.Height, bitmap2.Height));
-            using(Graphics g = Graphics.FromImage(result))
-            {
-                g.DrawImage(bitmap1, 0,0);
-                g.DrawImage(bitmap2, 0,0);
-
-            }
-            return result;
-        }
         private Bitmap overlayBitmaps(Bitmap bitmap1, Bitmap bitmap2, int offsetX, int offsertY)
         {
             Bitmap result = new Bitmap(Math.Max(bitmap1.Width, bitmap2.Width), Math.Max(bitmap1.Height, bitmap2.Height));
@@ -184,41 +156,34 @@ namespace Renderer2
         }
         private Bitmap scaleBitmap(Bitmap bitmap1, int width, int height)
         {
-            Bitmap result = new Bitmap(width, height);//new Bitmap(width, height);
+            Bitmap result = new Bitmap(width, height);
             result.SetResolution(400,400);
             using (Graphics g = Graphics.FromImage(result))
             {
-                g.DrawImage(bitmap1, 0, 0, width, height);//, width, height);//, width, height);
+                g.DrawImage(bitmap1, 0, 0, width, height);
 
             }
             bitmap1.Dispose();
             return result;
         }
 
-        public static Bitmap CaptureScreenX()
+        public static Bitmap CaptureScreenX(int xy)
         {
             try
             {
-                // Creating a new Bitmap object
                 Bitmap captureBitmap = new Bitmap(1920, 1080, PixelFormat.Format32bppArgb);
 
-                // Creating a Rectangle object which will capture our Current Screen
-                Rectangle captureRectangle = Screen.AllScreens[0].Bounds;
+                Rectangle captureRectangle = Screen.AllScreens[xy].Bounds;
 
-                // Creating a new Graphics Object
                 using (Graphics captureGraphics = Graphics.FromImage(captureBitmap))
                 {
-                    // Copying Image from The Screen
                     captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);
 
-                    // You can return the captured Bitmap here if you want to use it further
-                    //captureBitmap.SetResolution(768, 480);
                     return captureBitmap;
                 }
             }
             catch (Exception)
             {
-                // Handle any exceptions that may occur during screen capture
                 return null;
             }
         }
@@ -261,7 +226,6 @@ namespace Renderer2
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            //InitializeWebcam(CID.Value);
         }
     }
 }
