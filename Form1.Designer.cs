@@ -57,7 +57,7 @@
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(407, 45);
             this.trackBar1.TabIndex = 1;
-            this.trackBar1.Value = 86;
+            this.trackBar1.Value = 360;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // trackBar2
@@ -69,7 +69,7 @@
             this.trackBar2.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.trackBar2.Size = new System.Drawing.Size(45, 407);
             this.trackBar2.TabIndex = 1;
-            this.trackBar2.Value = 86;
+            this.trackBar2.Value = 360;
             this.trackBar2.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // panel2

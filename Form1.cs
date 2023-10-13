@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 using Accord.Video;
 using Accord.Video.DirectShow;
 using Accord.Vision.Detection;
-
+//Hello
 namespace Renderer2
 {
     public partial class Form1 : Form
@@ -61,7 +61,7 @@ namespace Renderer2
             primaryScreen = Screen.PrimaryScreen;
             screenBounds = primaryScreen.Bounds;
             
-            InitializeWebcam(0);
+            InitializeWebcam(2);
         }
         public Form1()
         {
@@ -126,7 +126,7 @@ namespace Renderer2
         private void AnimationTimer_Tick2(object sender, EventArgs e)
         {
             if (S != null) try { scaledMirror = scaleBitmap(S, wx, hy); } catch (Exception) { }
-            if (S != null) try { finalImage = overlayBitmaps(webcam1, scaledMirror, this.trackBar1.Value+180+offsetX, -this.trackBar2.Value+360+offsetY); } catch (Exception) { }
+            if (S != null) try { finalImage = overlayBitmaps(webcam1, scaledMirror, this.trackBar1.Value-60+offsetX, -this.trackBar2.Value+207+360+offsetY); } catch (Exception) { }
 
 
         }
