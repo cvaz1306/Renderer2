@@ -5,7 +5,6 @@ using Renderer2;
 using System.Drawing.Imaging;
 using Accord.Video;
 using Accord.Video.DirectShow;
-using Accord.Vision.Detection;
 namespace Renderer2
 {
     public partial class Form1 : Form
@@ -30,7 +29,7 @@ namespace Renderer2
         int wx, hy;
         int offsetX, offsetY;
         Accord.Vision.Detection.Cascades.FaceHaarCascade cascade = new Accord.Vision.Detection.Cascades.FaceHaarCascade();
-        HaarObjectDetector detector;
+
         private void InitializeWebcam(int xy)
 
         {
@@ -41,7 +40,7 @@ namespace Renderer2
                 return;
             }
             
-            videoSource = new VideoCaptureDevice(videoDevices[xy].MonikerString);
+                videoSource = new VideoCaptureDevice(videoDevices[xy].MonikerString);
             videoSource.NewFrame += new NewFrameEventHandler(VideoSource_NewFrame);
 
             videoSource.Start();
@@ -65,8 +64,6 @@ namespace Renderer2
         public Form1()
         {
             InitializeComponent();
-            detector = new HaarObjectDetector(this.cascade, minSize: 50,
-    searchMode: ObjectDetectorSearchMode.NoOverlap);
             
             animationTimer = new Timer();
             animationTimer.Interval = 10; 
@@ -82,7 +79,7 @@ namespace Renderer2
             animationTimer3.Interval = 10; 
             animationTimer3.Tick += AnimationTimer_Tick;
             animationTimer3.Start();
-           
+            WindowState = FormWindowState.Maximized;
         }
         public Form1(int inte, string t)
         {
@@ -114,7 +111,7 @@ namespace Renderer2
         
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
-            S = CaptureScreenX(0);
+            S = CaptureScreenX(1);
             scale = this.v1.Value;
             wx = (int)(1920 / ((float)v1.Value / 10));
             hy = (int)(1080 / ((float)v1.Value / 10));
@@ -132,10 +129,10 @@ namespace Renderer2
         private void AnimationTimer_Tick3(object sender, EventArgs e)
         {
             frameCt++;
-            if (frameCt % 50 == 0)
-            {
+/*            if (frameCt % 25 == 0)
+            {*/
                 GC.Collect();
-            }
+            /*}*/
             using (var graphics = CreateGraphics())
             {
                 try { graphics.DrawImage(finalImage, 0, 0); } catch (Exception) { }
@@ -157,7 +154,7 @@ namespace Renderer2
         private Bitmap scaleBitmap(Bitmap bitmap1, int width, int height)
         {
             Bitmap result = new Bitmap(width, height);
-            result.SetResolution(400,400);
+            result.SetResolution(200,200);
             using (Graphics g = Graphics.FromImage(result))
             {
                 g.DrawImage(bitmap1, 0, 0, width, height);
@@ -171,10 +168,10 @@ namespace Renderer2
         {
             try
             {
-                Bitmap captureBitmap = new Bitmap(1920, 1080, PixelFormat.Format32bppArgb);
+                
 
                 Rectangle captureRectangle = Screen.AllScreens[xy].Bounds;
-
+                Bitmap captureBitmap = new Bitmap(captureRectangle.Size.Width, captureRectangle.Size.Height, PixelFormat.Format32bppArgb);
                 using (Graphics captureGraphics = Graphics.FromImage(captureBitmap))
                 {
                     captureGraphics.CopyFromScreen(captureRectangle.Left, captureRectangle.Top, 0, 0, captureRectangle.Size);

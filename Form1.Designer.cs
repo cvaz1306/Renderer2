@@ -33,7 +33,6 @@
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.panel2 = new System.Windows.Forms.Panel();
             this.v1 = new System.Windows.Forms.HScrollBar();
-            this.resol = new System.Windows.Forms.HScrollBar();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.panel2.SuspendLayout();
@@ -52,10 +51,10 @@
             // trackBar1
             // 
             this.trackBar1.LargeChange = 2;
-            this.trackBar1.Location = new System.Drawing.Point(82, 25);
+            this.trackBar1.Location = new System.Drawing.Point(70, 25);
             this.trackBar1.Maximum = 720;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(407, 45);
+            this.trackBar1.Size = new System.Drawing.Size(271, 45);
             this.trackBar1.TabIndex = 1;
             this.trackBar1.Value = 360;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
@@ -67,7 +66,7 @@
             this.trackBar2.Maximum = 720;
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.trackBar2.Size = new System.Drawing.Size(45, 407);
+            this.trackBar2.Size = new System.Drawing.Size(45, 244);
             this.trackBar2.TabIndex = 1;
             this.trackBar2.Value = 360;
             this.trackBar2.Scroll += new System.EventHandler(this.trackBar1_Scroll);
@@ -76,9 +75,9 @@
             // 
             this.panel2.Controls.Add(this.trackBar1);
             this.panel2.Controls.Add(this.trackBar2);
-            this.panel2.Location = new System.Drawing.Point(670, 94);
+            this.panel2.Location = new System.Drawing.Point(852, 283);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(502, 476);
+            this.panel2.Size = new System.Drawing.Size(339, 320);
             this.panel2.TabIndex = 4;
             // 
             // v1
@@ -90,22 +89,11 @@
             this.v1.TabIndex = 5;
             this.v1.Value = 10;
             // 
-            // resol
-            // 
-            this.resol.Location = new System.Drawing.Point(9, 26);
-            this.resol.Maximum = 300;
-            this.resol.Minimum = 1;
-            this.resol.Name = "resol";
-            this.resol.Size = new System.Drawing.Size(1185, 17);
-            this.resol.TabIndex = 5;
-            this.resol.Value = 100;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1203, 625);
-            this.Controls.Add(this.resol);
             this.Controls.Add(this.v1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.button1);
@@ -127,7 +115,6 @@
         private System.Windows.Forms.TrackBar trackBar2;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.HScrollBar v1;
-        private System.Windows.Forms.HScrollBar resol;
     }
 }
 
